@@ -1,25 +1,20 @@
-name: CI Client
+name: CI Mobile
 
 on:
   push:
     branches: [ master ]
     paths:
-      - 'packages/client/**'
-      - '.github/workflows/client.yml'
+      - 'packages/mobile/**'
+      - '.github/workflows/mobile.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Build/Deploy
-        env:
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-          REACT_APP_URL: ${{ secrets.REACT_APP_URL }}
-        run: |
-          cd packages/client
-          yarn
-          yarn build
-          npx netlify-cli deploy --dir=build --prod
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
