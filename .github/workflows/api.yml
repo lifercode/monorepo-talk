@@ -1,0 +1,32 @@
+name: CI Server
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'packages/server/**'
+      - '.github/workflows/server.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: |
+          cd packages/server
+          yarn
+      - name: Generate production build
+        run: |
+          cd packages/server
+          yarn build
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
+          heroku_app_name: ${{secrets.HEROKU_BACKEND_APP_NAME}}
+          heroku_email: "dev@divisio.com.br"
+          appdir: "packages/server"

@@ -1,0 +1,25 @@
+name: CI Client
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'packages/client/**'
+      - '.github/workflows/client.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build/Deploy
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          REACT_APP_URL: ${{ secrets.REACT_APP_URL }}
+        run: |
+          cd packages/client
+          yarn
+          yarn build
+          npx netlify-cli deploy --dir=build --prod
